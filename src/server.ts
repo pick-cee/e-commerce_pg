@@ -4,6 +4,7 @@ import cors from 'cors'
 import 'reflect-metadata'
 import { createConnection } from 'typeorm'
 import config from './config/ormConfig'
+import userRoute from './routes/user.route'
 
 dotenv.config()
 
@@ -26,6 +27,8 @@ try {
 app.get('/', (request, response) => {
     response.json({ message: 'Welcome to the E-commerce API' })
 })
+
+app.use('/user', userRoute)
 
 app.listen(port, () => {
     console.log(`Server listening on port: ${port}`)

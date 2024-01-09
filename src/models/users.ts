@@ -16,6 +16,9 @@ class User {
     @Column({ type: 'varchar' })
     email!: string
 
+    @Column({ type: 'varchar', nullable: false })
+    password!: string
+
     @OneToMany(() => Cart, (cart) => cart.user)
     carts!: Cart[]
 }
