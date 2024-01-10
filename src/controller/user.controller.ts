@@ -5,7 +5,6 @@ import { hash, verify } from 'argon2';
 import { jwtSign } from "../helpers/auth";
 
 
-
 export const registerUser = async (request: Request, response: Response) => {
     const userRepo = getRepository(User)
     try {
@@ -45,7 +44,7 @@ export const login = async (request: Request, response: Response) => {
                 message: 'User not found'
             })
         }
-        const pwMatches = await verify(user.password, password)
+        const pwMatches = await verify(user.password!, password)
         if (!pwMatches) {
             return response.status(401).json({
                 message: 'Incorrect password'
@@ -72,4 +71,80 @@ export const login = async (request: Request, response: Response) => {
 
 }
 
+export const getProfile = async (request: Request, response: Response) => {
+    const userRepo = getRepository(User)
+    const userId = request.user.userId
 
+    const user = await userRepo.find({ where: { id: userId } })
+
+    if (!user) {
+        return response.status(404).json({
+            message: 'User not found'
+        })
+    }
+
+    return response.status(200).json({
+        message: 'User profile.....',
+        user
+    })
+}
+
+export const updateProfile = async (request: Request, response: Response) => {
+    try {
+        const userRepo = getRepository(User)
+        const userId = request.user.userId
+
+        const user = await userRepo.findOne({ where: { id: userId } })
+
+        if (!user) {
+            return response.status(404).json({
+                message: 'User not found'
+            })
+        }
+
+        user.email = request.body.email
+        user.firstName = request.body.firstName
+        user.lastName = request.body.lastName
+
+        delete user.password
+        await userRepo.save(user)
+
+        return response.status(200).json({
+            message: 'Updates successful',
+            user
+        })
+    }
+    catch (err: any) {
+        return response.status(500).json({
+            message: 'server error',
+            error: err.message
+        })
+    }
+
+}
+
+export const deleteProfile = async (request: Request, response: Response) => {
+    try {
+        const userRepo = getRepository(User)
+        const userId = request.user.userId
+
+        const user = await userRepo.findOne({ where: { id: userId } })
+
+        if (!user) {
+            return response.status(404).json({
+                message: 'User not found'
+            })
+        }
+
+        await userRepo.remove(user)
+        return response.status(200).json({
+            message: 'User deleted.....'
+        })
+    }
+    catch (err: any) {
+        return response.status(500).json({
+            message: 'server error',
+            error: err.message
+        })
+    }
+}
