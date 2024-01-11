@@ -5,6 +5,7 @@ import 'reflect-metadata'
 import { createConnection } from 'typeorm'
 import config from './config/ormConfig'
 import userRoute from './routes/user.route'
+import productRoute from './routes/product.route'
 
 dotenv.config()
 
@@ -29,6 +30,7 @@ app.get('/', (request, response) => {
 })
 
 app.use('/user', userRoute)
+app.use('/product', productRoute)
 
 app.listen(port, () => {
     console.log(`Server listening on port: ${port}`)
