@@ -90,6 +90,6 @@ export default class ProductService {
             throw new Error('Product not found!')
         }
 
-        return await prodRepo.delete(prod)
+        return await prodRepo.remove(prod)
     }
 }

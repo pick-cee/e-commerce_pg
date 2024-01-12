@@ -19,6 +19,9 @@ class Product {
     @Column({ type: 'varchar' })
     image!: string
 
+    @ManyToMany(() => Cart, (cart) => cart.products)
+    carts!: Cart[]
+
 }
 
 export default Product

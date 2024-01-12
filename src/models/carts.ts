@@ -2,8 +2,8 @@ import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryGe
 import User from './users';
 import Product from './products';
 
-@Entity({ name: 'carts' })
 
+@Entity({ name: 'carts' })
 class Cart {
     @PrimaryGeneratedColumn({ type: 'bigint' })
     id!: number
@@ -12,9 +12,21 @@ class Cart {
     @JoinColumn({ name: 'user_id' })
     user!: User
 
-    @ManyToOne(() => Product, (product) => product.id)
-    @JoinColumn({ name: 'product_id' })
-    products!: Product[];
+    @ManyToOne(() => Product, (product) => product)
+    @JoinTable({ name: 'products_cart' })
+    products!: [
+        {
+            productId: number
+        },
+        {
+            productName: string
+        },
+        {
+            image: string
+        },
+        { price: number }
+
+    ]
 
 }
 

@@ -12,7 +12,8 @@ const config: ConnectionOptions = {
         Product,
         Cart
     ],
-    synchronize: true
+    synchronize: true,
+
 
 
 }
